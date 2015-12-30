@@ -1,19 +1,3 @@
-/*************************************************** 
-  This is an example for the Adafruit Thermocouple Sensor w/MAX31855K
-
-  Designed specifically to work with the Adafruit Thermocouple Sensor
-  ----> https://www.adafruit.com/products/269
-
-  These displays use SPI to communicate, 3 pins are required to  
-  interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
-
 #include <SPI.h>
 #include "Adafruit_MAX31855.h"
 
@@ -33,7 +17,7 @@
 
 // initialize the Thermocouples
 Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
-Adafruit_MAX31855 thermocouple(MAXCLK2, MAXCS2, MAXDO2);
+Adafruit_MAX31855 thermocouple2(MAXCLK2, MAXCS2, MAXDO2);
 
 // Example creating a thermocouple instance with hardware SPI (Uno/Mega only)
 // on a given CS pin.
@@ -52,7 +36,10 @@ void loop() {
   // basic readout test, just print the current temp
    Serial.print("Internal Temp = ");
    Serial.println(thermocouple.readInternal());
-
+   
+   Serial.print("Internal Temp 2 = ");
+   Serial.println(thermocouple2.readInternal());
+   
    double c = thermocouple.readCelsius();
    if (isnan(c)) {
      Serial.println("Something wrong with thermocouple!");
@@ -60,6 +47,15 @@ void loop() {
      Serial.print("C = "); 
      Serial.println(c);
    }
+   
+   double c2 = thermocouple2.readCelsius();
+   if (isnan(c2)) {
+     Serial.println("Something wrong with thermocouple2!");
+   } else {
+     Serial.print("C2 = "); 
+     Serial.println(c2);
+   }
+   
    //Serial.print("F = ");
    //Serial.println(thermocouple.readFarenheit());
  
