@@ -10,6 +10,7 @@
 #define MAXCS   3
 #define MAXCLK  4
 
+#define measurement_time 5000
 
 #define MAXDO2   11
 #define MAXCS2   12
@@ -27,37 +28,45 @@ Adafruit_MAX31855 thermocouple2(MAXCLK2, MAXCS2, MAXDO2);
 void setup() {  
   Serial.begin(9600);
   
-  Serial.println("MAX31855 test. Hi! I'm an Arduino");
+  Serial.println("Time\tAmbient\tC1\tC2");
   // wait for MAX chip to stabilize
   delay(500);
 }
 
+unsigned long loop_count = 0;
+
 void loop() {
-  // basic readout test, just print the current temp
-   Serial.print("Internal Temp = ");
-   Serial.println(thermocouple.readInternal());
+  loop_count = (loop_count + 1); 
+  while(loop_count*measurement_time - 270 >millis()){
+     delay(1);
+   }
+   // basic readout test, just print the current temp
+   double a1 = (thermocouple.readInternal());
    
-   Serial.print("Internal Temp 2 = ");
-   Serial.println(thermocouple2.readInternal());
+   double a2 = (thermocouple2.readInternal());
    
-   double c = thermocouple.readCelsius();
-   if (isnan(c)) {
+   double c1 = thermocouple.readCelsius();
+   if (isnan(c1)) {
      Serial.println("Something wrong with thermocouple!");
-   } else {
-     Serial.print("C = "); 
-     Serial.println(c);
    }
    
    double c2 = thermocouple2.readCelsius();
    if (isnan(c2)) {
      Serial.println("Something wrong with thermocouple2!");
-   } else {
-     Serial.print("C2 = "); 
-     Serial.println(c2);
    }
+   
+   //display / print
+   Serial.print(millis()/1000.0);
+   Serial.print("\t");
+   Serial.print((a1+a2)/2);
+   Serial.print("\t");
+   Serial.print(c1);
+   Serial.print("\t");
+   Serial.print(c2);
+   Serial.println();
+   
    
    //Serial.print("F = ");
    //Serial.println(thermocouple.readFarenheit());
  
-   delay(1000);
 }
