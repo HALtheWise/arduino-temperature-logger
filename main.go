@@ -31,7 +31,7 @@ func main() {
 
 func findArduino() {
 	config := &serial.Config{Name: *port, Baud: 9600,
-		ReadTimeout: time.Second * 5}
+		ReadTimeout: time.Second * 10}
 
 	s, err := serial.OpenPort(config)
 
@@ -40,18 +40,17 @@ func findArduino() {
 		return
 	}
 
-	scanner := bufio.NewScanner(s)
+	reader := bufio.NewReader(s)
 
 	var lines []string
 
 	var line string
 	for line != EOM && len(lines) < 10 {
 
-		success := scanner.Scan()
-		line := scanner.Text()
+		line, err := reader.ReadString('\n')
 
-		if !success {
-			fmt.Printf("Unable to read scanner: %s", scanner.Err().Error())
+		if err != nil {
+			fmt.Printf("Unable to read reader: %s", err.Error())
 			return
 		}
 		if len(line) == 0 {
@@ -63,7 +62,7 @@ func findArduino() {
 
 	}
 
-	fmt.Printf("Data read: \n\n%s\n\n", strings.Join(lines, "\n"))
+	fmt.Printf("Data read: \n\n%s\n\n", strings.Join(lines, ""))
 }
 
 func export_data(data string) {
