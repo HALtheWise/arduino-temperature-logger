@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"github.com/skratchdot/open-golang/open" // Opens file in external editor
@@ -21,6 +22,7 @@ func main() {
 		fmt.Println("Port is required")
 		return
 	}
+
 	findArduino()
 	export_data("Hello World")
 }
@@ -36,21 +38,21 @@ func findArduino() {
 		return
 	}
 
-	buf := make([]byte, 10000)
-	n, err := s.Read(buf)
+	scanner := bufio.NewScanner(s)
 
-	fmt.Printf("Bytes recieved: %d", n)
+	success := scanner.Scan()
+	str := scanner.Text()
 
-	if err != nil {
-		fmt.Printf("Unable to read serial port: %s", err.Error())
+	if !success {
+		fmt.Printf("Unable to read scanner: %s", scanner.Err().Error())
 		return
 	}
-	if n == 0 {
+	if len(str) == 0 {
 		fmt.Printf("No data recieved")
 		return
 	}
 
-	fmt.Printf("Data read: \n\n%s\n\n", string(buf[:n]))
+	fmt.Printf("Data read: \n\n%s\n\n", str)
 }
 
 func export_data(data string) {
