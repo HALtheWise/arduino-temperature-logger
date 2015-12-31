@@ -53,7 +53,7 @@ func readData(port string) {
 
 	file, _ := os.Create(*FILENAME)
 	defer file.Close()
-	defer log.Println("Recieved data saved to %s", *FILENAME)
+	defer log.Printf("Recieved data saved to %s\n", *FILENAME)
 
 	mwr := io.MultiWriter(file, os.Stdout)
 
@@ -61,9 +61,9 @@ func readData(port string) {
 	firstline, _ := buff.ReadBytes('\n')
 	if !strings.ContainsAny(string(firstline), "03456789") {
 		// The first line seems not broken (heuristic)
+		log.Printf("First line added back in: \"%s\"\n", string(firstline))
 		mwr.Write(firstline)
 
-		log.Println("First line added back in: \"%s\"", string(firstline))
 	}
 
 	n, err := io.Copy(mwr, buff)
