@@ -34,6 +34,7 @@ func findArduino() {
 		ReadTimeout: time.Second * 10}
 
 	s, err := serial.OpenPort(config)
+	defer s.Close()
 
 	if err != nil {
 		fmt.Printf("Unable to open serial port: %s", err.Error())
