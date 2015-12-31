@@ -2,6 +2,7 @@ package main
 
 import (
 	//"github.com/tarm/serial"
+	"bufio"
 	"fmt"
 	"go.bug.st/serial"
 	"log"
@@ -41,5 +42,11 @@ func recieveComms(port string) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	fmt.Println(string(buff[:n]))
+	fmt.Printf("Recieved: %s\n", string(buff[:n]))
+
+	scanner := bufio.NewScanner(sp)
+	for _ := range {
+		scanner.Scan()
+		fmt.Println(scanner.Text()) // Println will add back the final '\n'
+	}
 }
