@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/skratchdot/open-golang/open" // Opens file in external editor
 	"go.bug.st/serial"
@@ -46,12 +47,21 @@ func readData(port string) {
 	defer sp.Close()
 
 	buff := bufio.NewReader(sp)
-	buff.ReadLine()
 
 	file, _ := os.Create(*FILENAME)
 	defer file.Close()
+	defer log.Println("Recieved data saved to %s", FILENAME)
 
 	mwr := io.MultiWriter(file, os.Stdout)
+
+	// Attempt to read the first line, to see if it's broken
+	firstline, _ := buff.ReadBytes('\n')
+	if !strings.ContainsAny(string(firstline), "03456789") {
+		// The first line seems not broken (heuristic)
+		mwr.Write(firstline)
+
+		log.Println("First line added back in: \"%s\"", string(firstline))
+	}
 
 	n, err := io.Copy(mwr, buff)
 
