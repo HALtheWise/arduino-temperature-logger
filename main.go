@@ -29,6 +29,7 @@ func main() {
 
 func findArduino() (string, error) {
 	ports, err := serial.GetPortsList()
+	log.Printf("Unsorted list of found ports: %s\n", ports)
 	if err != nil {
 		return "", err
 	}
@@ -36,7 +37,9 @@ func findArduino() (string, error) {
 		return "", errors.New("No devices found")
 	}
 	sort.Strings(ports)
-	return ports[len(ports)-1], nil
+	port := ports[len(ports)-1]
+	log.Printf("Selected port: %s\n", port)
+	return port, nil
 }
 
 func readData(port string) {
@@ -50,7 +53,7 @@ func readData(port string) {
 
 	file, _ := os.Create(*FILENAME)
 	defer file.Close()
-	defer log.Println("Recieved data saved to %s", FILENAME)
+	defer log.Println("Recieved data saved to %s", *FILENAME)
 
 	mwr := io.MultiWriter(file, os.Stdout)
 
