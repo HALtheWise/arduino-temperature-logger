@@ -2,34 +2,37 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/skratchdot/open-golang/open" // Opens file in external editor
-	"github.com/tarm/serial"
+	"go.bug.st/serial"
 	"os"
+	"sort"
 	"strings"
 	"time"
 )
 
-var port = flag.String("port", "", "What port is the Arduino connected to?")
-
-const (
-	FILENAME = "output.txt"
-	EOM      = "END OF FILE"
-)
+var FILENAME = flag.String("o", "output.txt", "Output file name")
 
 func main() {
-	flag.Parse()
-	if *port == "" {
-		fmt.Println("Port is required")
-		return
-	}
-
-	findArduino()
+	port := findArduino()
 	export_data("Hello World")
 }
 
-func findArduino() {
+func findArduino() (string error) {
+	ports, err := serial.GetPortsList()
+	if err != nil {
+		return "", err
+	}
+	if len(ports) == 0 {
+		return "", errors.New("No devices found")
+	}
+	sort(ports)
+	return ports[len(ports)-1], nil
+}
+
+func readData(port string) {
 	config := &serial.Config{Name: *port, Baud: 9600,
 		ReadTimeout: time.Second * 10}
 
