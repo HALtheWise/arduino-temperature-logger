@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -69,9 +68,9 @@ func readData(port string) {
 	n, err := io.Copy(mwr, buff)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 		return
 	}
 
-	fmt.Println("Bytes read: %d", n)
+	log.Println("Bytes read: %d", n)
 }
