@@ -7,8 +7,8 @@ import (
 	"io"
 	"log"
 	"os"
-	"sort"
 	"strings"
+	"time"
 
 	"github.com/skratchdot/open-golang/open" // Opens file in external editor
 	"go.bug.st/serial"
@@ -48,7 +48,7 @@ func findArduino() (string, error) {
 	if len(ports) == 0 {
 		return "", errors.New("No devices found")
 	}
-	sort.Strings(ports)
+	//sort.Strings(ports)
 	port := ports[len(ports)-1]
 	log.Printf("Selected port: %s\n", port)
 	return port, nil
