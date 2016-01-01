@@ -18,12 +18,25 @@ var FILENAME = flag.String("o", "output.txt", "Output file name")
 
 func main() {
 	flag.Parse()
+	printHelp()
 	port, err := findArduino()
 	if err != nil {
 		log.Fatal(err)
 	}
 	readData(port)
 	open.Run(*FILENAME)
+}
+
+func printHelp() {
+	log.Println("This program is designed to record data from an Arduino datalogger to a file.")
+	log.Println("Usage:")
+	log.Println("\t1. Place the thermocouples in their desired places.")
+	log.Println("\t2. Connect the Arduino to the computer.")
+	log.Println("\t3. Run this program. Verify that measurements are showing up.")
+	log.Println("\t4. When datalogging is complete, unplug the Arduino's USB cable.")
+	log.Println("\t5. Copy the resulting text file (default: output.txt) to an Excel workbook.")
+	log.Print("\n\n\n")
+	time.Sleep(time.Second)
 }
 
 func findArduino() (string, error) {
