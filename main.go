@@ -34,7 +34,7 @@ func printHelp() {
 	log.Println("\t2. Connect the Arduino to the computer.")
 	log.Println("\t3. Run this program. Verify that measurements are showing up.")
 	log.Println("\t4. When datalogging is complete, unplug the Arduino's USB cable.")
-	log.Println("\t5. Copy the resulting text file (default: output.txt) to an Excel workbook.")
+	log.Printf("\t5. Copy the resulting text file \"%s\" to an Excel workbook.\n", FILENAME)
 	log.Print("\n\n\n")
 	time.Sleep(time.Second)
 }
