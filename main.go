@@ -61,7 +61,7 @@ func readData(port string) {
 	firstline, _ := buff.ReadBytes('\n')
 	if !strings.ContainsAny(string(firstline), "03456789") {
 		// The first line seems not broken (heuristic)
-		log.Printf("First line added back in: \"%s\"\n", string(firstline))
+		log.Printf("First line added back in: \"%s\"\n", strings.TrimSpace(string(firstline)))
 		mwr.Write(firstline)
 
 	}
